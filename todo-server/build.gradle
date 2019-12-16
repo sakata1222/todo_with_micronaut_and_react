@@ -36,11 +36,15 @@ dependencies {
   implementation "javax.annotation:javax.annotation-api"
   implementation "io.micronaut:micronaut-http-server-netty"
   implementation "io.micronaut:micronaut-http-client"
-  implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+  implementation 'io.micronaut.configuration:micronaut-jooq'
+  implementation 'io.micronaut.configuration:micronaut-flyway'
+  implementation project(':todo-server:h2db-dao')
 
   compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
   runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+  runtimeOnly group: 'com.h2database', name: 'h2', version: '1.4.200'
+  runtimeOnly 'io.micronaut.configuration:micronaut-jdbc-hikari'
 
   testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
   testAnnotationProcessor "io.micronaut:micronaut-inject-java"
@@ -54,7 +58,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "todo.server.Application"
+mainClassName = "jp.gr.java_conf.saka.todo.server.Application"
 // use JUnit 5 platform
 test {
   useJUnitPlatform()

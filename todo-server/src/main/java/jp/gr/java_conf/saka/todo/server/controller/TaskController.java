@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import jp.gr.java_conf.saka.todo.server.controller.dto.TaskPresentationDto;
 import jp.gr.java_conf.saka.todo.server.controller.dto.TaskPresentationTranslator;
-import jp.gr.java_conf.saka.todo.server.service.ITaskService;
+import jp.gr.java_conf.saka.todo.server.domain.service.ITaskService;
 
 @Controller("/task")
 public class TaskController {
