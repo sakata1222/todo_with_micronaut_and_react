@@ -1,0 +1,64 @@
+plugins {
+  id 'java-library'
+  id "org.flywaydb.flyway"
+  id "nu.studer.jooq" version "3.0.3"
+}
+
+repositories {
+  mavenCentral()
+  maven { url "https://jcenter.bintray.com" }
+}
+
+ext {
+  dummyDbForJooq = "jdbc:h2:${projectDir}/tmp/dummydatabase"
+  jdbcDriver = 'org.h2.Driver'
+  jooqDestPackage = 'jp.gr.java_conf.saka.todo.server.infrastrcture.rdb.h2db.jooq.autogen'
+}
+
+dependencies {
+  api group: 'com.h2database', name: 'h2', version: '1.4.200'
+  jooqRuntime group: 'com.h2database', name: 'h2', version: '1.4.200'
+  jooqRuntime project(':todo-server:jooq-custom')
+
+  implementation "org.jooq:jooq:${jooqVersion}"
+}
+
+task flywayForJooq(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+  url = dummyDbForJooq
+}
+
+jooq {
+  version = "${jooqVersion}"
+  edition = 'OSS'
+
+  main(sourceSets.main) {
+    jdbc {
+      driver = "${jdbcDriver}"
+      url = "${dummyDbForJooq}"
+    }
+    generator {
+      target {
+        packageName = "${jooqDestPackage}"
+      }
+      strategy {
+        name = 'jp.gr.java_conf.saka.todo.server.infrastrcture.rdb.jooq.generator.JooqCustomGeneratorStrategy'
+      }
+      database() {
+        name = 'org.jooq.meta.h2.H2Database'
+        inputSchema = "PUBLIC"
+        excludes = '.*flyway_schema_history.*'
+      }
+      generate() {
+        relations = true
+        deprecated = false
+        records = true
+        fluentSetters = true
+        daos = true
+        immutablePojos = true
+        pojosEqualsAndHashCode = true
+      }
+    }
+  }
+}
+compileJava.dependsOn generateMainJooqSchemaSource
+generateMainJooqSchemaSource.dependsOn flywayForJooq

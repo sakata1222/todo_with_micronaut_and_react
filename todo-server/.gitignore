@@ -11,3 +11,7 @@ out/
 .project
 .settings
 .classpath
+
+/database/**
+
+!.gitkeep
