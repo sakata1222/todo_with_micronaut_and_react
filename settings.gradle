@@ -8,4 +8,7 @@
  */
 
 rootProject.name = 'todo_with_micronaut_and_react'
-include 'todo-server', 'todo-server:h2db-dao', 'todo-server:jooq-custom'
+include 'todo-server'
+include 'todo-server:application'
+include 'todo-server:h2db-dao'
+include 'todo-server:jooq-custom'
