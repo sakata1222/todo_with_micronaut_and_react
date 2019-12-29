@@ -33,9 +33,11 @@ dependencies {
   implementation "io.micronaut:micronaut-http-client"
   implementation 'io.micronaut.configuration:micronaut-jooq'
   implementation 'io.micronaut.configuration:micronaut-flyway'
+  implementation group: 'com.google.guava', name: 'guava', version: '28.1-jre'
   implementation project(':todo-server:h2db-dao')
 
   compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+  compileOnly group: 'org.jetbrains', name: 'annotations', version: '18.0.0'
 
   runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
   runtimeOnly group: 'com.h2database', name: 'h2', version: '1.4.200'

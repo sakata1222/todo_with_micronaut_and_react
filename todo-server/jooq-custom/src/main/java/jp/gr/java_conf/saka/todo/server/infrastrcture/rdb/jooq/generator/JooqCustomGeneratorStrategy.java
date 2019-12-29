@@ -13,7 +13,7 @@ public class JooqCustomGeneratorStrategy extends DefaultGeneratorStrategy {
       case DEFAULT:
         return "Jooq" + name;
       case RECORD:
-        return "JooqRecord" + name;
+        return "Jooq" + name;
       case POJO:
         return "Jooq" + name + "Dto";
       case INTERFACE:

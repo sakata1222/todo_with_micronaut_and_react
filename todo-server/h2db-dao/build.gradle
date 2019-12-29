@@ -17,15 +17,21 @@ ext {
 
 dependencies {
   api group: 'com.h2database', name: 'h2', version: '1.4.200'
+  api "org.jooq:jooq:${jooqVersion}"
+
   jooqRuntime group: 'com.h2database', name: 'h2', version: '1.4.200'
   jooqRuntime project(':todo-server:jooq-custom')
-
-  implementation "org.jooq:jooq:${jooqVersion}"
 }
 
 task flywayForJooq(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   url = dummyDbForJooq
 }
+
+task cleanDb(type: Delete) {
+  delete "${projectDir}/tmp/dummydatabase.mv.db"
+}
+
+clean.dependsOn cleanDb
 
 jooq {
   version = "${jooqVersion}"
