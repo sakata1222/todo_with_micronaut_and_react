@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaskPriority implements Comparable<TaskPriority> {
 
+  private static final int DEFAULT_PRIORITY = 100;
+
   private static final Comparator<TaskPriority> HIGHER_IS_IMPORTANT = Comparator
     .comparingInt(TaskPriority::getPriority).reversed();
 
@@ -20,6 +22,10 @@ public class TaskPriority implements Comparable<TaskPriority> {
 
   public static TaskPriority of(int priority) {
     return new TaskPriority(priority);
+  }
+
+  public static TaskPriority defaultPriority() {
+    return of(DEFAULT_PRIORITY);
   }
 
   public int getPriority() {

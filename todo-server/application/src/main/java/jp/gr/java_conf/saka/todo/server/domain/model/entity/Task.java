@@ -1,6 +1,7 @@
 package jp.gr.java_conf.saka.todo.server.domain.model.entity;
 
 import java.util.Optional;
+import java.util.OptionalLong;
 import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskDeadline;
 import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskId;
 import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskPriority;
@@ -18,8 +19,8 @@ public class Task {
 
   private String description;
 
-  private long createdTimestamp;
-  private long lastUpdatedTimestamp;
+  private Long createdTimestamp;
+  private Long lastUpdatedTimestamp;
   @NonNull
   private TaskPriority priority;
   private TaskDeadline deadline;
@@ -29,11 +30,21 @@ public class Task {
   }
 
   public boolean isIdAssigned() {
-    return id != TaskId.NOT_ASSIGNED;
+    return getId().isAssigned();
   }
 
   public long getIdAsLong() {
+    if (!getId().isAssigned()) {
+      throw new IllegalStateException("ID is not assigned");
+    }
     return getId().getId();
+  }
+
+  public OptionalLong getIdAsOptionalLong() {
+    if (!getId().isAssigned()) {
+      return OptionalLong.empty();
+    }
+    return OptionalLong.of(getIdAsLong());
   }
 
   public String getName() {

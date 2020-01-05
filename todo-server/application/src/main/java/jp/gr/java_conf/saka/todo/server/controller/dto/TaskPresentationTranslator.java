@@ -34,18 +34,44 @@ public class TaskPresentationTranslator {
       .build();
   }
 
-  public Task toDomainEntity(TaskPresentationDto task) {
+  public Task toNewDomainEntity(TaskPresentationDto task) {
     long current = currentTimestampSupplier.getAsLong();
-    return Task.builder()
-      .id(TaskId.ofNullable(
-        task.getId().map(Long::valueOf).orElse(null))
-      )
-      .name(task.getName())
-      .description(task.getDescription().orElse(null))
+    return toCommonDomainEntity(task, current)
+      .id(TaskId.notAssigned())
       .createdTimestamp(current)
-      .lastUpdatedTimestamp(current)
-      .priority(TaskPriority.of(task.getPriority()))
-      .deadline(task.getDeadline().map(TaskDeadline::ofIso8601).orElse(null))
       .build();
+  }
+
+  public Task toUpdatedDomainEntity(TaskPresentationDto task, long createdTimestamp) {
+    long current = currentTimestampSupplier.getAsLong();
+    return toCommonDomainEntity(task, current)
+      .id(TaskId.of(
+        task.getId().map(Long::valueOf)
+          .orElseThrow(() -> new IllegalArgumentException("ID is not specified"))
+        )
+      )
+      .createdTimestamp(createdTimestamp)
+      .build();
+  }
+
+  public Task toPatchedDomainEntity(TaskPresentationDto task, Task baseTask) {
+    long current = currentTimestampSupplier.getAsLong();
+    var clonedBaseTaskBuilder = baseTask.toBuilder()
+      .lastUpdatedTimestamp(current);
+    task.getName().ifPresent(clonedBaseTaskBuilder::name);
+    task.getDeadline().ifPresent(clonedBaseTaskBuilder::description);
+    task.getPriority().map(TaskPriority::of).ifPresent(clonedBaseTaskBuilder::priority);
+    task.getDeadline().map(TaskDeadline::ofIso8601).ifPresent(clonedBaseTaskBuilder::deadline);
+    return clonedBaseTaskBuilder.build();
+  }
+
+  private Task.TaskBuilder toCommonDomainEntity(TaskPresentationDto task, long lastUpdatedTime) {
+    return Task.builder()
+      .name(
+        task.getName().orElseThrow(() -> new IllegalArgumentException("Name should be specified")))
+      .description(task.getDescription().orElse(null))
+      .lastUpdatedTimestamp(lastUpdatedTime)
+      .priority(task.getPriority().map(TaskPriority::of).orElseGet(TaskPriority::defaultPriority))
+      .deadline(task.getDeadline().map(TaskDeadline::ofIso8601).orElse(null));
   }
 }

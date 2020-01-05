@@ -23,14 +23,17 @@ public class TaskRdbTranslator {
       .build();
   }
 
-  JooqTaskRecord toRecord(Task entity, Supplier<JooqTaskRecord> emptyRecordSupplier) {
-    return emptyRecordSupplier.get()
-      .setId(entity.getIdAsLong())
+  JooqTaskRecord toRecord(
+    Task entity,
+    Supplier<JooqTaskRecord> emptyRecordSupplier) {
+    JooqTaskRecord record = emptyRecordSupplier.get()
       .setName(entity.getName())
       .setDescription(entity.getDescriptionOrNull())
       .setCreatedTimestamp(entity.getCreatedTimestamp())
       .setLastUpdatedTimestamp(entity.getLastUpdatedTimestamp())
       .setPriority(entity.getPriorityAsInt())
       .setDeadline(entity.getDeadlineAsIso8601().orElse(null));
+    entity.getIdAsOptionalLong().ifPresent(record::setId);
+    return record;
   }
 }

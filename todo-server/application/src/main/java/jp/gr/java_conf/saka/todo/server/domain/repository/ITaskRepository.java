@@ -7,7 +7,9 @@ import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskId;
 
 public interface ITaskRepository {
 
-  TaskId save(Task task);
+  TaskId saveAsNew(Task task);
+
+  TaskId saveAsUpdate(Task task);
 
   List<Task> findAll();
 

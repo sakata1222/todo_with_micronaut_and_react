@@ -5,17 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskPresentationDto {
 
   private String id;
 
-  @NonNull
   private String name;
 
   private String description;
@@ -24,21 +22,20 @@ public class TaskPresentationDto {
 
   private Long lastUpdatedTimestamp;
 
-  private int priority;
+  private Integer priority;
 
   private String deadline;
-
 
   public Optional<String> getId() {
     return Optional.ofNullable(id);
   }
 
-  public Optional<String> getDescription() {
-    return Optional.ofNullable(description);
+  public Optional<String> getName() {
+    return Optional.ofNullable(name);
   }
 
-  public Optional<String> getDeadline() {
-    return Optional.ofNullable(deadline);
+  public Optional<String> getDescription() {
+    return Optional.ofNullable(description);
   }
 
   public Optional<Long> getCreatedTimestamp() {
@@ -48,4 +45,13 @@ public class TaskPresentationDto {
   public Optional<Long> getLastUpdatedTimestamp() {
     return Optional.ofNullable(lastUpdatedTimestamp);
   }
+
+  public Optional<Integer> getPriority() {
+    return Optional.ofNullable(priority);
+  }
+
+  public Optional<String> getDeadline() {
+    return Optional.ofNullable(deadline);
+  }
+
 }
