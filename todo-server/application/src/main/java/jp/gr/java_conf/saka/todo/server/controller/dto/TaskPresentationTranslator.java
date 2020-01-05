@@ -11,7 +11,7 @@ import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskPriority;
 @Singleton
 public class TaskPresentationTranslator {
 
-  private LongSupplier currentTimestampSupplier;
+  private final LongSupplier currentTimestampSupplier;
 
   public TaskPresentationTranslator() {
     this(() -> System.currentTimeMillis());

@@ -11,7 +11,7 @@ public class TaskPriority implements Comparable<TaskPriority> {
   private static final Comparator<TaskPriority> HIGHER_IS_IMPORTANT = Comparator
     .comparingInt(TaskPriority::getPriority).reversed();
 
-  private int priority;
+  private final int priority;
 
   private TaskPriority(int priority) {
     Preconditions.checkArgument(

@@ -12,18 +12,18 @@ import lombok.NonNull;
 public class Task {
 
   @NonNull
-  private TaskId id;
+  private final TaskId id;
 
   @NonNull
-  private String name;
+  private final String name;
 
-  private String description;
+  private final String description;
 
-  private Long createdTimestamp;
-  private Long lastUpdatedTimestamp;
+  private final Long createdTimestamp;
+  private final Long lastUpdatedTimestamp;
   @NonNull
-  private TaskPriority priority;
-  private TaskDeadline deadline;
+  private final TaskPriority priority;
+  private final TaskDeadline deadline;
 
   public TaskId getId() {
     return id;

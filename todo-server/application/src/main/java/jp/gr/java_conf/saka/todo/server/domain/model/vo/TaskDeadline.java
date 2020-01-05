@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class TaskDeadline {
 
-  private LocalDate deadline;
+  private final LocalDate deadline;
 
   private TaskDeadline(LocalDate deadline) {
     this.deadline = deadline;

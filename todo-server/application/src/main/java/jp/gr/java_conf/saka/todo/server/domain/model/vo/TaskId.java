@@ -5,9 +5,9 @@ import java.util.Objects;
 
 public class TaskId {
 
-  private static TaskId NOT_ASSIGNED = new TaskId(-1L);
+  private static final TaskId NOT_ASSIGNED = new TaskId(-1L);
 
-  private long id;
+  private final long id;
 
   private TaskId(long id) {
     this.id = id;
