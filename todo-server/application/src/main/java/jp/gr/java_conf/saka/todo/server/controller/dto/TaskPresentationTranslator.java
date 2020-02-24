@@ -1,77 +1,78 @@
 package jp.gr.java_conf.saka.todo.server.controller.dto;
 
-import com.google.common.annotations.VisibleForTesting;
-import java.util.function.LongSupplier;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.inject.Singleton;
-import jp.gr.java_conf.saka.todo.server.domain.model.entity.Task;
-import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskDeadline;
-import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskId;
-import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskPriority;
+import jp.gr.java_conf.saka.todo.server.application.task.TaskApplicationDto;
+import jp.gr.java_conf.saka.todo.server.application.task.TaskCreateCommand;
+import jp.gr.java_conf.saka.todo.server.application.task.TaskDeleteCommand;
+import jp.gr.java_conf.saka.todo.server.application.task.TaskPatchCommand;
+import jp.gr.java_conf.saka.todo.server.application.task.TaskUpdateCommand;
 
 @Singleton
 public class TaskPresentationTranslator {
 
-  private final LongSupplier currentTimestampSupplier;
+  /**
+   * yyyy-MM-dd
+   */
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
-  public TaskPresentationTranslator() {
-    this(() -> System.currentTimeMillis());
-  }
-
-  @VisibleForTesting
-  TaskPresentationTranslator(LongSupplier currentTimestampSupplier) {
-    this.currentTimestampSupplier = currentTimestampSupplier;
-  }
-
-  public TaskPresentationDto toDto(Task task) {
+  public TaskPresentationDto toDto(TaskApplicationDto task) {
     return TaskPresentationDto.builder()
-      .id(String.valueOf(task.getIdAsLong()))
+      .id(String.valueOf(task.getId()))
       .name(task.getName())
       .description(task.getDescription().orElse(null))
       .createdTimestamp(task.getCreatedTimestamp())
       .lastUpdatedTimestamp(task.getLastUpdatedTimestamp())
-      .priority(task.getPriorityAsInt())
-      .deadline(task.getDeadlineAsIso8601().orElse(null))
+      .priority(task.getTaskPriority().orElse(null))
+      .deadline(task.getDeadline().map(FORMATTER::format).orElse(null))
       .build();
   }
 
-  public Task toNewDomainEntity(TaskPresentationDto task) {
-    long current = currentTimestampSupplier.getAsLong();
-    return toCommonDomainEntity(task, current)
-      .id(TaskId.notAssigned())
-      .createdTimestamp(current)
-      .build();
-  }
-
-  public Task toUpdatedDomainEntity(TaskPresentationDto task, long createdTimestamp) {
-    long current = currentTimestampSupplier.getAsLong();
-    return toCommonDomainEntity(task, current)
-      .id(TaskId.of(
-        task.getId().map(Long::valueOf)
-          .orElseThrow(() -> new IllegalArgumentException("ID is not specified"))
-        )
-      )
-      .createdTimestamp(createdTimestamp)
-      .build();
-  }
-
-  public Task toPatchedDomainEntity(TaskPresentationDto task, Task baseTask) {
-    long current = currentTimestampSupplier.getAsLong();
-    var clonedBaseTaskBuilder = baseTask.toBuilder()
-      .lastUpdatedTimestamp(current);
-    task.getName().ifPresent(clonedBaseTaskBuilder::name);
-    task.getDeadline().ifPresent(clonedBaseTaskBuilder::description);
-    task.getPriority().map(TaskPriority::of).ifPresent(clonedBaseTaskBuilder::priority);
-    task.getDeadline().map(TaskDeadline::ofIso8601).ifPresent(clonedBaseTaskBuilder::deadline);
-    return clonedBaseTaskBuilder.build();
-  }
-
-  private Task.TaskBuilder toCommonDomainEntity(TaskPresentationDto task, long lastUpdatedTime) {
-    return Task.builder()
+  public TaskCreateCommand toCreateCommand(TaskPresentationDto task) {
+    var builder = TaskCreateCommand.builder()
       .name(
-        task.getName().orElseThrow(() -> new IllegalArgumentException("Name should be specified")))
-      .description(task.getDescription().orElse(null))
-      .lastUpdatedTimestamp(lastUpdatedTime)
-      .priority(task.getPriority().map(TaskPriority::of).orElseGet(TaskPriority::defaultPriority))
-      .deadline(task.getDeadline().map(TaskDeadline::ofIso8601).orElse(null));
+        task.getName().orElseThrow(() -> new IllegalArgumentException("Name must not be null")));
+    task.getDescription().ifPresent(builder::description);
+    task.getPriority().ifPresent(builder::priority);
+    task.getDeadline().map(LocalDate::parse).ifPresent(builder::deadline);
+    return builder.build();
+  }
+
+  public TaskUpdateCommand toUpdatedCommand(String id, TaskPresentationDto task) {
+    var builder = TaskUpdateCommand.builder()
+      .id(id)
+      .name(
+        task.getName().orElseThrow(() -> new IllegalArgumentException("Name must not be null")));
+    task.getDescription().ifPresent(builder::description);
+    task.getPriority().ifPresent(builder::priority);
+    task.getDeadline().map(this::parse).ifPresent(builder::deadline);
+    return builder.build();
+  }
+
+  public TaskPatchCommand toPatchCommand(String id, TaskPresentationDto task) {
+    var builder = TaskPatchCommand.builder()
+      .id(id);
+    task.getName().ifPresent(builder::name);
+    task.getDescription().ifPresent(builder::description);
+    task.getPriority().ifPresent(builder::priority);
+    task.getDeadline().map(this::parse).ifPresent(builder::deadline);
+    return builder.build();
+  }
+
+  public TaskDeleteCommand toDeleteCommand(String id) {
+    return TaskDeleteCommand.builder()
+      .id(id)
+      .build();
+  }
+
+  private LocalDate parse(String date) {
+    try {
+      return LocalDate.from(FORMATTER.parse(date));
+    } catch (DateTimeParseException e) {
+      throw new IllegalArgumentException(
+        "Date format is invalid. " + FORMATTER.toString(), e);
+    }
   }
 }
