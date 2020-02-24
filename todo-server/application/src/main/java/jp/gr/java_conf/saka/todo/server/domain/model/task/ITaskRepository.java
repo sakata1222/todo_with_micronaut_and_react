@@ -1,9 +1,7 @@
-package jp.gr.java_conf.saka.todo.server.domain.repository;
+package jp.gr.java_conf.saka.todo.server.domain.model.task;
 
 import java.util.List;
 import java.util.Optional;
-import jp.gr.java_conf.saka.todo.server.domain.model.entity.Task;
-import jp.gr.java_conf.saka.todo.server.domain.model.vo.TaskId;
 
 public interface ITaskRepository {
 
@@ -15,5 +13,5 @@ public interface ITaskRepository {
 
   Optional<Task> findById(TaskId id);
 
-  void delete(Task task);
+  void delete(TaskId id);
 }

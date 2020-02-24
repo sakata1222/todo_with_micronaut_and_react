@@ -1,4 +1,4 @@
-package jp.gr.java_conf.saka.todo.server.domain.model.vo;
+package jp.gr.java_conf.saka.todo.server.domain.model.task;
 
 import com.google.common.base.Preconditions;
 import java.util.Comparator;

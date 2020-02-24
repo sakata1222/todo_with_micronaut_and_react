@@ -1,33 +1,20 @@
-package jp.gr.java_conf.saka.todo.server.domain.model.vo;
+package jp.gr.java_conf.saka.todo.server.domain.model.task;
 
 import com.google.common.base.Preconditions;
 import java.util.Objects;
 
 public class TaskId {
 
-  private static final TaskId NOT_ASSIGNED = new TaskId(-1L);
+  private final String id;
 
-  private final long id;
-
-  private TaskId(long id) {
+  private TaskId(String id) {
     this.id = id;
   }
 
-  public static TaskId of(long id) {
-    Preconditions.checkArgument(id > 0, "id should be positive long:" + id);
+  public static TaskId of(String id) {
+    Preconditions.checkNotNull(id);
+    Preconditions.checkArgument(id.length() > 0);
     return new TaskId(id);
-  }
-
-  public static TaskId notAssigned() {
-    return NOT_ASSIGNED;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public boolean isAssigned() {
-    return this != NOT_ASSIGNED;
   }
 
   @Override
@@ -52,5 +39,9 @@ public class TaskId {
     return "TaskId{" +
       "id=" + id +
       '}';
+  }
+
+  public String toStringValue() {
+    return id;
   }
 }
