@@ -12,6 +12,7 @@ import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskDeadline;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskId;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskName;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskPriority;
+import jp.gr.java_conf.saka.todo.server.domain.service.ITaskService;
 
 @Singleton
 public class TaskApplicationService implements ITaskApplicationService {
@@ -23,13 +24,18 @@ public class TaskApplicationService implements ITaskApplicationService {
   private final ITaskFactory taskFactory;
 
   @Inject
+  private final ITaskService taskService;
+
+  @Inject
   private final ITaskRepository taskRepository;
 
   public TaskApplicationService(LongSupplier currentTimeSupplier,
     ITaskFactory taskFactory,
+    ITaskService taskService,
     ITaskRepository taskRepository) {
     this.currentTimeSupplier = currentTimeSupplier;
     this.taskFactory = taskFactory;
+    this.taskService = taskService;
     this.taskRepository = taskRepository;
   }
 
@@ -42,13 +48,14 @@ public class TaskApplicationService implements ITaskApplicationService {
 
   @Override
   public Optional<TaskApplicationDto> find(TaskId id) {
-    return taskRepository.findById(id).map(TaskApplicationDto::of);
+    return taskRepository.find(id).map(TaskApplicationDto::of);
   }
 
   @Override
   public synchronized TaskApplicationDto createTask(TaskCreateCommand command) {
     var createdTask = taskFactory.create(
       TaskName.of(command.getName()), currentTimeSupplier.getAsLong());
+    taskService.validateNotConflict(createdTask);
     taskRepository.saveAsNew(createdTask);
     return find(createdTask.getId())
       .orElseThrow(() ->
@@ -58,7 +65,7 @@ public class TaskApplicationService implements ITaskApplicationService {
 
   @Override
   public TaskApplicationDto updateTask(TaskUpdateCommand command) {
-    var existingTask = taskRepository.findById(TaskId.of(command.getId()))
+    var existingTask = taskRepository.find(TaskId.of(command.getId()))
       .orElseThrow(
         () -> new IllegalArgumentException("Specified task is not found:" + command.getId()));
     existingTask.changeName(TaskName.of(command.getName()));
@@ -66,6 +73,7 @@ public class TaskApplicationService implements ITaskApplicationService {
     existingTask.changePriority(command.getPriority().map(TaskPriority::of).orElse(null));
     existingTask.changeDeadline(command.getDeadline().map(TaskDeadline::of).orElse(null));
     existingTask.setLastUpdatedTimestamp(currentTimeSupplier.getAsLong());
+    taskService.validateNotConflict(existingTask);
     taskRepository.saveAsUpdate(existingTask);
     return find(existingTask.getId())
       .orElseThrow(() ->
@@ -75,7 +83,7 @@ public class TaskApplicationService implements ITaskApplicationService {
 
   @Override
   public TaskApplicationDto patchTask(TaskPatchCommand command) {
-    var existingTask = taskRepository.findById(TaskId.of(command.getId()))
+    var existingTask = taskRepository.find(TaskId.of(command.getId()))
       .orElseThrow(
         () -> new IllegalArgumentException("Specified task is not found:" + command.getId()));
     command.getName().map(TaskName::of).ifPresent(existingTask::changeName);
@@ -83,6 +91,7 @@ public class TaskApplicationService implements ITaskApplicationService {
     command.getPriority().map(TaskPriority::of).ifPresent(existingTask::changePriority);
     command.getDeadline().map(TaskDeadline::of).ifPresent(existingTask::changeDeadline);
     existingTask.setLastUpdatedTimestamp(currentTimeSupplier.getAsLong());
+    taskService.validateNotConflict(existingTask);
     taskRepository.saveAsUpdate(existingTask);
     return find(existingTask.getId())
       .orElseThrow(() ->
