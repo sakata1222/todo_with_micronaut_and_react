@@ -2,6 +2,7 @@ package jp.gr.java_conf.saka.todo.server.domain.model.task;
 
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.NonNull;
@@ -88,4 +89,20 @@ public class Task {
     return lastUpdatedTimestamp;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Task task = (Task) o;
+    return Objects.equals(id, task.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }
