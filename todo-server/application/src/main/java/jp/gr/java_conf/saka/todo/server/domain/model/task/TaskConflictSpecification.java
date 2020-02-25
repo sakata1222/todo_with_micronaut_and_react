@@ -12,6 +12,9 @@ public class TaskConflictSpecification implements ISpecification<Task> {
 
   @Override
   public boolean isSatisfiedBy(Task value) {
+    if (task.equals(value)) {
+      return false;
+    }
     return task.getName().equals(value.getName());
   }
 
