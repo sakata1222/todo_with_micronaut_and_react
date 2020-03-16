@@ -2,9 +2,8 @@ import React from "react";
 import "./App.css";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import AppBar from "@material-ui/core/AppBar";
-import TaskHeader from "./TaskHeader";
-import TaskArea from "./TaskArea";
+import TaskHeader from "./components/TaskHeader";
+import TaskArea from "./components/TaskArea";
 import { GridSize } from "@material-ui/core/Grid";
 
 // https://github.com/facebook/create-react-app/pull/8177
