@@ -1,12 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Box from "@material-ui/core/Box";
 import Grid, { GridSize } from "@material-ui/core/Grid";
 import { useDrop } from "react-dnd";
 import "./TaskArea.css";
 import TaskCreationLauncherContainer from "./TaskCreationLauncherContainer";
 import TaskView, { DraggedTask } from "./TaskView";
 import Task, { TaskState } from "../model/Task";
-import { createTask, changeTaskState } from "../redux-module/ReduxTaskModule";
+import { changeTaskState } from "../redux-module/ReduxTaskModule";
 import { taskSelector } from "../redux-module/Store";
 
 type TaskAreaProps = {
@@ -53,39 +54,51 @@ function TaskColumns(props: TaskColumnsProps) {
     drop: (item: DraggedTask) =>
       dispatch(changeTaskState(item.taskId, TaskState.DONE))
   });
-  const onTaskSubmitCallback = (t: Task) => {
-    dispatch(createTask(t));
+  const boxProps = {
+    className: "Task-column-box"
   };
   return (
-    <Grid container className="taskArea" spacing={1}>
-      <Grid item xs={props.todoAreaRatio}>
-        <Grid item xs={12}>
-          <TaskCreationLauncherContainer />
-        </Grid>
-        <Grid item xs={12}>
-          <div ref={todoDrop} className="Task-column">
+    <Grid container className="Task-area" spacing={1}>
+      <Grid item xs={props.todoAreaRatio} className="Task-column-todo">
+        <Box {...boxProps}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TaskCreationLauncherContainer />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} ref={todoDrop} className="Task-column">
             <TaskAreaColumn
               state={TaskState.TODO}
               tasks={tasks.filterTasks(TaskState.TODO)}
             ></TaskAreaColumn>
-          </div>
-        </Grid>
+          </Grid>
+        </Box>
       </Grid>
-      <Grid item xs={props.doingAreaRatio}>
-        <div ref={doingDrop} className="Task-column">
+      <Grid
+        item
+        xs={props.doingAreaRatio}
+        ref={doingDrop}
+        className="Task-column"
+      >
+        <Box {...boxProps}>
           <TaskAreaColumn
             state={TaskState.DOING}
             tasks={tasks.filterTasks(TaskState.DOING)}
           ></TaskAreaColumn>
-        </div>
+        </Box>
       </Grid>
-      <Grid item xs={props.doneAreaRatio}>
-        <div ref={doneDrop} className="Task-column">
+      <Grid
+        item
+        xs={props.doneAreaRatio}
+        ref={doneDrop}
+        className="Task-column"
+      >
+        <Box {...boxProps}>
           <TaskAreaColumn
             state={TaskState.DONE}
             tasks={tasks.filterTasks(TaskState.DONE)}
           ></TaskAreaColumn>
-        </div>
+        </Box>
       </Grid>
     </Grid>
   );

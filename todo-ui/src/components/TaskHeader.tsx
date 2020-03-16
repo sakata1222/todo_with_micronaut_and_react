@@ -12,44 +12,28 @@ type TaskHeaderProps = {
 };
 
 function TaskHeader(props: TaskHeaderProps) {
-  var max: number = 12;
+  const boxProps = {
+    bgcolor: "primary.main",
+    color: "primary.contrastText",
+    fontSize: "h4.fontSize",
+    fontWeight: "fontWeightBold"
+  };
 
   return (
     <Grid container className="taskHeader" spacing={1}>
       <Grid item xs={props.todoAreaRatio}>
         <Typography>
-          <Box
-            bgcolor="primary.main"
-            color="primary.contrastText"
-            fontSize="h4.fontSize"
-            fontWeight="fontWeightBold"
-          >
-            Todo
-          </Box>
+          <Box {...boxProps}>Todo</Box>
         </Typography>
       </Grid>
       <Grid item xs={props.doingAreaRatio}>
         <Typography>
-          <Box
-            bgcolor="primary.main"
-            color="primary.contrastText"
-            fontSize="h4.fontSize"
-            fontWeight="fontWeightBold"
-          >
-            Doing
-          </Box>
+          <Box {...boxProps}>Doing</Box>
         </Typography>
       </Grid>
       <Grid item xs={props.doneAreaRatio}>
         <Typography>
-          <Box
-            bgcolor="primary.main"
-            color="primary.contrastText"
-            fontSize="h4.fontSize"
-            fontWeight="fontWeightBold"
-          >
-            Done
-          </Box>
+          <Box {...boxProps}>Done</Box>
         </Typography>
       </Grid>
     </Grid>
