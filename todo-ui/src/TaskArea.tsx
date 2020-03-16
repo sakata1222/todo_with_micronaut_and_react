@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { DndProvider, useDrag, useDrop, DragObjectWithType } from "react-dnd";
-import Backend from "react-dnd-html5-backend";
 import Grid, { GridSize } from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Collapse from "@material-ui/core/Collapse";
+import Zoom from "@material-ui/core/Zoom";
+import { useDrag, useDrop } from "react-dnd";
 import "./TaskArea.css";
 
 // https://codesandbox.io/s/github/react-dnd/react-dnd/tree/gh-pages/examples_hooks_ts/04-sortable/simple?from-embed
@@ -80,6 +88,12 @@ class TaskList {
     return Array.from(this.taskMap.values()).filter(t => t.state === state);
   }
 
+  addTask(task: Task) {
+    const clone = this.clone();
+    clone.taskMap.set(task.id, task);
+    return clone;
+  }
+
   updateState(id: string, state: string): TaskList {
     const clone = this.clone();
     const task = clone.taskMap.get(id);
@@ -113,15 +127,30 @@ function TaskColumns(props: TaskColumnsProps) {
     drop: (item: DragTask) =>
       setTasks(tasks.updateState(item.taskId, TaskState.DONE))
   });
+  const [isAdding, setIsAdding] = useState(false);
+  const onTaskSubmitCallback = (t: Task) => {
+    setIsAdding(false);
+    setTasks(tasks.addTask(t));
+  };
   return (
     <Grid container className="taskArea" spacing={1}>
       <Grid item xs={props.todoAreaRatio}>
-        <div ref={todoDrop} className="Task-column">
-          <TaskAreaColumn
-            state={TaskState.TODO}
-            tasks={tasks.filterTasks(TaskState.TODO)}
-          ></TaskAreaColumn>
-        </div>
+        <Grid item xs={12}>
+          <AddArea
+            isAdding={isAdding}
+            onAddClickCallback={() => setIsAdding(true)}
+            onTaskCanceCallback={() => setIsAdding(false)}
+            onTaskSubmitCallback={onTaskSubmitCallback}
+          ></AddArea>
+        </Grid>
+        <Grid item xs={12}>
+          <div ref={todoDrop} className="Task-column">
+            <TaskAreaColumn
+              state={TaskState.TODO}
+              tasks={tasks.filterTasks(TaskState.TODO)}
+            ></TaskAreaColumn>
+          </div>
+        </Grid>
       </Grid>
       <Grid item xs={props.doingAreaRatio}>
         <div ref={doingDrop} className="Task-column">
@@ -140,6 +169,37 @@ function TaskColumns(props: TaskColumnsProps) {
         </div>
       </Grid>
     </Grid>
+  );
+}
+
+type AddAreaProps = {
+  isAdding: boolean;
+  onTaskSubmitCallback: (t: Task) => void;
+  onTaskCanceCallback: () => void;
+  onAddClickCallback: () => void;
+};
+
+function AddArea(props: AddAreaProps) {
+  return (
+    <div>
+      <Collapse in={props.isAdding}>
+        <TaskAddView
+          onOkCallbak={props.onTaskSubmitCallback}
+          onCancelCallback={props.onTaskCanceCallback}
+        ></TaskAddView>
+      </Collapse>
+      <IconButton
+        disabled={props.isAdding}
+        color="primary"
+        size="medium"
+        onClick={e => props.onAddClickCallback()}
+      >
+        <AddIcon
+          color={props.isAdding ? "disabled" : "action"}
+          fontSize="large"
+        />
+      </IconButton>
+    </div>
   );
 }
 
@@ -199,6 +259,76 @@ function TaskView(props: TaskViewProps) {
         </Typography>
       </Card>
     </div>
+  );
+}
+
+type TaskAddViewProps = {
+  onOkCallbak: (t: Task) => void;
+  onCancelCallback: () => void;
+};
+
+function TaskAddView(props: TaskAddViewProps) {
+  const [name, setName] = useState("");
+  const [isTitleValid, setIsTitleValid] = useState(true);
+  const onTitleChange = (name: string) => {
+    setIsTitleValid(name.trim() != "");
+    setName(name);
+  };
+  const toTask = (name: string) => {
+    const task: Task = {
+      id: String(new Date().getTime()),
+      name: name,
+      state: TaskState.TODO
+    };
+    return task;
+  };
+  const onOk = (t: Task) => {
+    props.onOkCallbak(t);
+    setName("");
+  };
+  return (
+    <Paper className="Task-add-view">
+      <Grid container className="taskArea" spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            id="name"
+            label="Name"
+            required={true}
+            size="medium"
+            fullWidth
+            onChange={e => onTitleChange(e.target.value)}
+            error={!isTitleValid}
+            helperText={isTitleValid ? "" : "Name must not be empty"}
+            value={name}
+          ></TextField>
+        </Grid>
+        <Grid container justify="center" spacing={2}>
+          <Grid item xs="auto">
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              disabled={name === "" || !isTitleValid}
+              startIcon={<SaveIcon />}
+              onClick={e => onOk(toTask(name))}
+            >
+              Save
+            </Button>
+          </Grid>
+          <Grid item xs="auto">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              startIcon={<CancelIcon />}
+              onClick={e => props.onCancelCallback()}
+            >
+              Cancel
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
 
