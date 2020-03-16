@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import "./TaskCreationView.css";
-import Task, { TaskState } from "../common/Task";
+import Task, { TaskState } from "../model/Task";
 
 type TaskCreationViewProps = {
   onOkCallbak: (t: Task) => void;

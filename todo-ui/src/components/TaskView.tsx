@@ -2,7 +2,7 @@ import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import Task from "../common/Task";
+import Task from "../model/Task";
 
 type TaskViewProps = {
   dndItemType: string;

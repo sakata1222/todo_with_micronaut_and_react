@@ -1,10 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import "./App.css";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import TaskHeader from "./components/TaskHeader";
 import TaskArea from "./components/TaskArea";
 import { GridSize } from "@material-ui/core/Grid";
+import { loadTask } from "./redux-module/ReduxTaskModule";
 
 // https://github.com/facebook/create-react-app/pull/8177
 // https://github.com/facebook/create-react-app/pull/8412
@@ -16,6 +18,8 @@ type AreaRatio = {
 };
 function App() {
   const ratio: AreaRatio = { todo: 4, doing: 4, done: 4 };
+  const dispatch = useDispatch();
+  dispatch(loadTask());
   return (
     <DndProvider backend={Backend}>
       <div className="App">
