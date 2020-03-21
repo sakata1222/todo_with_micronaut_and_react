@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
+import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import TaskCreationView from "./TaskCreationView";
 import Task from "../model/Task";
@@ -30,14 +30,14 @@ function TaskCreationLauncher(props: TaskCreationLauncherProps) {
           onCancelCallback={onCancel}
         ></TaskCreationView>
       </Collapse>
-      <IconButton
+      <Fab
         disabled={isAdding}
         color="primary"
         size="medium"
         onClick={e => setIsAdding(true)}
       >
-        <AddIcon color={isAdding ? "disabled" : "action"} fontSize="large" />
-      </IconButton>
+        <AddIcon color={isAdding ? "disabled" : "inherit"} fontSize="large" />
+      </Fab>
     </div>
   );
 }
