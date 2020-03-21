@@ -11,6 +11,7 @@ function TaskCreationLauncherContainer() {
   };
   return (
     <TaskCreationLauncher
+      currentDate={new Date()}
       onTaskCanceCallback={() => null}
       onTaskSubmitCallback={onTaskSubmitCallback}
     ></TaskCreationLauncher>

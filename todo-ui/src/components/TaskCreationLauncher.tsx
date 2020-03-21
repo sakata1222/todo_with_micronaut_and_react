@@ -6,6 +6,7 @@ import TaskCreationView from "./TaskCreationView";
 import Task from "../model/Task";
 
 type TaskCreationLauncherProps = {
+  currentDate: Date;
   onTaskSubmitCallback: (t: Task) => void;
   onTaskCanceCallback: () => void;
 };
@@ -24,6 +25,7 @@ function TaskCreationLauncher(props: TaskCreationLauncherProps) {
     <div>
       <Collapse in={isAdding}>
         <TaskCreationView
+          currentDate={props.currentDate}
           onOkCallbak={onSubmit}
           onCancelCallback={onCancel}
         ></TaskCreationView>
