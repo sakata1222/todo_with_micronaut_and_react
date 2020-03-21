@@ -2,6 +2,9 @@ type Task = {
   id: string;
   name: string;
   state: string;
+  description?: string;
+  deadline?: Date;
+  priority?: Number;
 };
 
 export const TaskState = {
