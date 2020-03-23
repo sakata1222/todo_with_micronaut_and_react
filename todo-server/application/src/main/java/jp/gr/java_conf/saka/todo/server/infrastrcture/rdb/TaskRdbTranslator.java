@@ -10,6 +10,7 @@ import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskDeadline;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskId;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskName;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskPriority;
+import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskState;
 import jp.gr.java_conf.saka.todo.server.infrastrcture.rdb.h2db.jooq.autogen.tables.records.JooqTaskRecord;
 
 @Singleton
@@ -21,6 +22,7 @@ public class TaskRdbTranslator {
     return Task.builder()
       .id(TaskId.of(record.getId()))
       .name(TaskName.of(record.getName()))
+      .state(TaskState.ofStringValue(record.getState()))
       .description(record.getDescription())
       .createdTimestamp(record.getCreatedTimestamp())
       .lastUpdatedTimestamp(record.getLastUpdatedTimestamp())
@@ -41,6 +43,7 @@ public class TaskRdbTranslator {
     JooqTaskRecord record = emptyRecordSupplier.get()
       .setId(entity.getIdAsValue())
       .setName(entity.getNameAsValue())
+      .setState(entity.getStateAsValue())
       .setDescription(entity.getDescription().orElse(null))
       .setCreatedTimestamp(entity.getCreatedTimestamp())
       .setLastUpdatedTimestamp(entity.getLastUpdatedTimestamp())

@@ -14,6 +14,9 @@ public class TaskPatchCommand {
   private final String id;
 
   private final String name;
+
+  private final String state;
+
   private final String description;
 
   private final Integer priority;
@@ -22,6 +25,10 @@ public class TaskPatchCommand {
 
   public Optional<String> getName() {
     return Optional.ofNullable(name);
+  }
+
+  public Optional<String> getState() {
+    return Optional.ofNullable(state);
   }
 
   public Optional<String> getDescription() {

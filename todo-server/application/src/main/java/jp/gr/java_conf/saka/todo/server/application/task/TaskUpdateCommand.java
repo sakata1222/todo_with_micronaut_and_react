@@ -15,11 +15,15 @@ public class TaskUpdateCommand {
 
   @NonNull
   private final String name;
+
+  @NonNull
+  private final String state;
+
   private final String description;
 
   private final Integer priority;
-  private final LocalDate deadline;
 
+  private final LocalDate deadline;
 
   public Optional<String> getDescription() {
     return Optional.ofNullable(description);

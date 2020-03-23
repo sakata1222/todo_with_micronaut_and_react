@@ -17,6 +17,9 @@ public class TaskApplicationDto {
   @NonNull
   private final String name;
 
+  @NonNull
+  private final String state;
+
   private final String description;
 
   private final long createdTimestamp;
@@ -31,6 +34,7 @@ public class TaskApplicationDto {
     var builder = TaskApplicationDto.builder();
     builder.id(task.getIdAsValue());
     builder.name(task.getNameAsValue());
+    builder.state(task.getStateAsValue());
     task.getDescription().ifPresent(builder::description);
     builder.createdTimestamp(task.getCreatedTimestamp());
     builder.lastUpdatedTimestamp(task.getLastUpdatedTimestamp());

@@ -65,6 +65,11 @@ tasks.withType(JavaCompile) {
   options.compilerArgs.add('-parameters')
 }
 
+task cleanDb(type: Delete) {
+  delete "${projectDir}/database/h2db.mv.db"
+  delete "${projectDir}/database/h2db.trace.db"
+}
+
 shadowJar {
   mergeServiceFiles()
 }

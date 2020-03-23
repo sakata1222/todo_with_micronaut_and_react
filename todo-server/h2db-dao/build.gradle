@@ -29,6 +29,7 @@ task flywayForJooq(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 
 task cleanDb(type: Delete) {
   delete "${projectDir}/tmp/dummydatabase.mv.db"
+  delete "${projectDir}/tmp/dummydatabase.trace.db"
 }
 
 clean.dependsOn cleanDb

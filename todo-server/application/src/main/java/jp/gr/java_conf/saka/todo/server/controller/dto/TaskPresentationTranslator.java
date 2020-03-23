@@ -22,6 +22,7 @@ public class TaskPresentationTranslator {
     return TaskPresentationDto.builder()
       .id(String.valueOf(task.getId()))
       .name(task.getName())
+      .state(task.getState())
       .description(task.getDescription().orElse(null))
       .createdTimestamp(task.getCreatedTimestamp())
       .lastUpdatedTimestamp(task.getLastUpdatedTimestamp())
@@ -34,6 +35,7 @@ public class TaskPresentationTranslator {
     var builder = TaskCreateCommand.builder()
       .name(
         task.getName().orElseThrow(() -> new IllegalArgumentException("Name must not be null")));
+    task.getState().ifPresent(builder::state);
     task.getDescription().ifPresent(builder::description);
     task.getPriority().ifPresent(builder::priority);
     task.getDeadline().map(LocalDate::parse).ifPresent(builder::deadline);
@@ -44,7 +46,10 @@ public class TaskPresentationTranslator {
     var builder = TaskUpdateCommand.builder()
       .id(id)
       .name(
-        task.getName().orElseThrow(() -> new IllegalArgumentException("Name must not be null")));
+        task.getName().orElseThrow(() -> new IllegalArgumentException("Name must not be null")))
+      .state(
+        task.getState().orElseThrow(() -> new IllegalArgumentException("State must not be null"))
+      );
     task.getDescription().ifPresent(builder::description);
     task.getPriority().ifPresent(builder::priority);
     task.getDeadline().map(this::parse).ifPresent(builder::deadline);
@@ -55,6 +60,7 @@ public class TaskPresentationTranslator {
     var builder = TaskPatchCommand.builder()
       .id(id);
     task.getName().ifPresent(builder::name);
+    task.getState().ifPresent(builder::state);
     task.getDescription().ifPresent(builder::description);
     task.getPriority().ifPresent(builder::priority);
     task.getDeadline().map(this::parse).ifPresent(builder::deadline);
