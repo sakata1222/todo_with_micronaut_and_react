@@ -13,28 +13,24 @@ type TaskHeaderProps = {
 
 function TaskHeader(props: TaskHeaderProps) {
   const boxProps = {
+    height: "100%",
     bgcolor: "primary.main",
     color: "primary.contrastText",
     fontSize: "h4.fontSize",
-    fontWeight: "fontWeightBold"
+    fontWeight: "fontWeightBold",
+    textAlign: "center"
   };
 
   return (
     <Grid container className="taskHeader" spacing={1}>
       <Grid item xs={props.todoAreaRatio}>
-        <Typography>
-          <Box {...boxProps}>Todo</Box>
-        </Typography>
+        <Box {...boxProps}>Todo</Box>
       </Grid>
       <Grid item xs={props.doingAreaRatio}>
-        <Typography>
-          <Box {...boxProps}>Doing</Box>
-        </Typography>
+        <Box {...boxProps}>Doing</Box>
       </Grid>
       <Grid item xs={props.doneAreaRatio}>
-        <Typography>
-          <Box {...boxProps}>Done</Box>
-        </Typography>
+        <Box {...boxProps}>Done</Box>
       </Grid>
     </Grid>
   );

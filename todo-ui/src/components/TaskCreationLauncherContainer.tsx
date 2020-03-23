@@ -1,13 +1,15 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import TaskCreationLauncher from "./TaskCreationLauncher";
-import Task, { TaskState } from "../model/Task";
-import { createTask } from "../redux-module/ReduxTaskModule";
+import Task from "../model/Task";
+import { addTask, fetchTasks } from "../redux-module/ReduxTaskModule";
 
 function TaskCreationLauncherContainer() {
   const dispatch = useDispatch();
   const onTaskSubmitCallback = (t: Task) => {
-    dispatch(createTask(t));
+    new Promise(resolve => {
+      resolve(dispatch(addTask(t)));
+    }).then(_ => dispatch(fetchTasks()));
   };
   return (
     <TaskCreationLauncher

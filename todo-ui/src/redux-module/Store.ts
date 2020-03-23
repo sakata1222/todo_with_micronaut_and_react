@@ -3,7 +3,7 @@ import taskReducer from "./ReduxTaskModule";
 import { TaskList } from "../model/Task";
 
 const rootReducer = combineReducers({ taskState: taskReducer });
-type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
 const rootStore = createStore(combineReducers({ taskState: taskReducer }));
 
 // selectors

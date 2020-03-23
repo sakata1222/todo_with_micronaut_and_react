@@ -13,6 +13,8 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import "./TaskCreationView.css";
 import Task, { TaskState } from "../model/Task";
 
+const defaultPriority = "50";
+
 type TaskCreationViewProps = {
   currentDate: Date;
   onOkCallbak: (t: Task) => void;
@@ -23,10 +25,10 @@ function TaskCreationView(props: TaskCreationViewProps) {
   const [name, setName] = useState("");
   const [isNameValid, setIsNameValid] = useState(true);
   const onNameChange = (name: string) => {
-    setIsNameValid(name.trim() != "");
+    setIsNameValid(name.trim() !== "");
     setName(name);
   };
-  const [description, setDescription] = useState<string | null>(null);
+  const [description, setDescription] = useState<string>("");
   const onDescriptionChange = (description: string) => {
     setDescription(description);
   };
@@ -34,7 +36,7 @@ function TaskCreationView(props: TaskCreationViewProps) {
   const onDateChange = (date: Date | null) => {
     setDate(date);
   };
-  const [priority, setPriority] = useState("50");
+  const [priority, setPriority] = useState(defaultPriority);
   const [isPriorityValid, setIsPriorityValid] = useState(true);
   const onPriorityChange = (priority: string) => {
     const priorityNumber = Number(priority);
@@ -44,6 +46,7 @@ function TaskCreationView(props: TaskCreationViewProps) {
   const toTask = (name: string) => {
     const task: Task = {
       id: String(new Date().getTime()),
+      description: description.trim() !== null ? description : undefined,
       name: name,
       state: TaskState.TODO,
       deadline: date != null ? date : undefined,
@@ -54,8 +57,9 @@ function TaskCreationView(props: TaskCreationViewProps) {
   const onOk = (t: Task) => {
     props.onOkCallbak(t);
     setName("");
-    setDescription(null);
+    setDescription("");
     setDate(props.currentDate);
+    setPriority(defaultPriority);
   };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -90,10 +94,8 @@ function TaskCreationView(props: TaskCreationViewProps) {
             <KeyboardDatePicker
               id="date"
               label="Deadline"
-              required={true}
               format="MM/dd/yyyy"
               variant="inline"
-              defaultValue={date}
               onChange={e => onDateChange(e)}
               value={date}
               KeyboardButtonProps={{

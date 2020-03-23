@@ -114,7 +114,7 @@ function TaskAreaColumn(props: TaskAreaColumnProps) {
     <Grid container className="taskColumn" spacing={2}>
       {props.tasks.map((task, i) => {
         return (
-          <Grid item xs={6}>
+          <Grid key={"task-area-column-" + props.state + i} item xs={6}>
             <TaskView task={task} dndItemType={DnDItemType.TASK}></TaskView>
           </Grid>
         );
