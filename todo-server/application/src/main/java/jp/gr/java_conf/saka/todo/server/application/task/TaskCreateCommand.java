@@ -13,20 +13,15 @@ public class TaskCreateCommand {
   @NonNull
   private final String name;
 
+  private final String state;
+
   private final String description;
 
   private final Integer priority;
+
   private final LocalDate deadline;
 
-  public Optional<String> getDescription() {
-    return Optional.ofNullable(description);
-  }
-
-  public Optional<Integer> getPriority() {
-    return Optional.ofNullable(priority);
-  }
-
-  public Optional<LocalDate> getDeadline() {
-    return Optional.ofNullable(deadline);
+  public Optional<String> getState() {
+    return Optional.ofNullable(state);
   }
 }

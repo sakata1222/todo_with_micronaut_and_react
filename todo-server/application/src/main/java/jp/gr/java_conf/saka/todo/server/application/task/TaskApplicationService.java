@@ -12,6 +12,7 @@ import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskDeadline;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskId;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskName;
 import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskPriority;
+import jp.gr.java_conf.saka.todo.server.domain.model.task.TaskState;
 import jp.gr.java_conf.saka.todo.server.domain.service.ITaskService;
 
 @Singleton
@@ -54,7 +55,9 @@ public class TaskApplicationService implements ITaskApplicationService {
   @Override
   public synchronized TaskApplicationDto createTask(TaskCreateCommand command) {
     var createdTask = taskFactory.create(
-      TaskName.of(command.getName()), currentTimeSupplier.getAsLong());
+      TaskName.of(command.getName()),
+      command.getState().map(TaskState::ofStringValue).orElse(TaskState.TODO),
+      currentTimeSupplier.getAsLong());
     taskService.validateNotConflict(createdTask);
     taskRepository.saveAsNew(createdTask);
     return find(createdTask.getId())
@@ -69,6 +72,7 @@ public class TaskApplicationService implements ITaskApplicationService {
       .orElseThrow(
         () -> new IllegalArgumentException("Specified task is not found:" + command.getId()));
     existingTask.changeName(TaskName.of(command.getName()));
+    existingTask.changeState(TaskState.ofStringValue(command.getState()));
     existingTask.changeDescription(command.getDescription().orElse(null));
     existingTask.changePriority(command.getPriority().map(TaskPriority::of).orElse(null));
     existingTask.changeDeadline(command.getDeadline().map(TaskDeadline::of).orElse(null));
@@ -87,6 +91,7 @@ public class TaskApplicationService implements ITaskApplicationService {
       .orElseThrow(
         () -> new IllegalArgumentException("Specified task is not found:" + command.getId()));
     command.getName().map(TaskName::of).ifPresent(existingTask::changeName);
+    command.getState().map(TaskState::ofStringValue).ifPresent(existingTask::changeState);
     command.getDescription().ifPresent(existingTask::changeDescription);
     command.getPriority().map(TaskPriority::of).ifPresent(existingTask::changePriority);
     command.getDeadline().map(TaskDeadline::of).ifPresent(existingTask::changeDeadline);

@@ -17,6 +17,9 @@ public class Task {
   @NonNull
   private TaskName name;
 
+  @NonNull
+  private TaskState state;
+
   private String description;
 
   private TaskPriority priority;
@@ -47,6 +50,18 @@ public class Task {
 
   public void changeName(TaskName name) {
     this.name = Preconditions.checkNotNull(name);
+  }
+
+  public TaskState getState() {
+    return state;
+  }
+
+  public String getStateAsValue() {
+    return getState().toStringValue();
+  }
+
+  public void changeState(TaskState state) {
+    this.state = Preconditions.checkNotNull(state);
   }
 
   public Optional<String> getDescription() {

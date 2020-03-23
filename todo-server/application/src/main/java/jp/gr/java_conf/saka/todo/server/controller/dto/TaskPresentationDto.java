@@ -16,6 +16,8 @@ public class TaskPresentationDto {
 
   private String name;
 
+  private String state;
+
   private String description;
 
   private Long createdTimestamp;
@@ -32,6 +34,10 @@ public class TaskPresentationDto {
 
   public Optional<String> getName() {
     return Optional.ofNullable(name);
+  }
+
+  public Optional<String> getState() {
+    return Optional.ofNullable(state);
   }
 
   public Optional<String> getDescription() {
