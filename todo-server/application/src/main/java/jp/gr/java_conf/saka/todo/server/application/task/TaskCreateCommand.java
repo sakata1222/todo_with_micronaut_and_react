@@ -24,4 +24,17 @@ public class TaskCreateCommand {
   public Optional<String> getState() {
     return Optional.ofNullable(state);
   }
+
+  public Optional<String> getDescription() {
+    return Optional.ofNullable(description);
+  }
+
+  public Optional<Integer> getPriority() {
+    return Optional.ofNullable(priority);
+  }
+
+  public Optional<LocalDate> getDeadline() {
+    return Optional.ofNullable(deadline);
+  }
+
 }
