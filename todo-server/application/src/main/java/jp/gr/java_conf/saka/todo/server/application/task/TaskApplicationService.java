@@ -59,6 +59,10 @@ public class TaskApplicationService implements ITaskApplicationService {
       command.getState().map(TaskState::ofStringValue).orElse(TaskState.TODO),
       currentTimeSupplier.getAsLong());
     taskService.validateNotConflict(createdTask);
+    createdTask.changeDescription(command.getDescription().orElse(null));
+    createdTask.changePriority(command.getPriority().map(TaskPriority::of).orElse(null));
+    createdTask.changeDeadline(command.getDeadline().map(TaskDeadline::of).orElse(null));
+    createdTask.setLastUpdatedTimestamp(createdTask.getCreatedTimestamp());
     taskRepository.saveAsNew(createdTask);
     return find(createdTask.getId())
       .orElseThrow(() ->
