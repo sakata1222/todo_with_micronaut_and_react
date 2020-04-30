@@ -10,7 +10,7 @@ type Task = {
 export const TaskState = {
   TODO: "TODO",
   DOING: "DOING",
-  DONE: "DONE"
+  DONE: "DONE",
 };
 
 export class TaskList {
@@ -18,14 +18,14 @@ export class TaskList {
 
   constructor(tasks: Array<Task>) {
     this.taskMap = new Map<string, Task>();
-    tasks.forEach(task => this.taskMap.set(task.id, task));
+    tasks.forEach((task) => this.taskMap.set(task.id, task));
   }
 
   filterTasks(state: string): Array<Task> {
-    return Array.from(this.taskMap.values()).filter(t => t.state === state);
+    return Array.from(this.taskMap.values()).filter((t) => t.state === state);
   }
 
-  addTask(task: Task) {
+  addTask(task: Task): TaskList {
     if (this.taskMap.get(task.id)) {
       throw new Error("The task already exists");
     }
@@ -34,7 +34,7 @@ export class TaskList {
     return clone;
   }
 
-  updateTask(task: Task) {
+  updateTask(task: Task): TaskList {
     const clone = this.clone();
     clone.taskMap.set(task.id, task);
     return clone;
@@ -46,6 +46,12 @@ export class TaskList {
     if (task) {
       task.state = state;
     }
+    return clone;
+  }
+
+  deleteTask(id: string): TaskList {
+    const clone = this.clone();
+    clone.taskMap.delete(id);
     return clone;
   }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import Grid, { GridSize } from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 
 // https://medium.com/@koss_lebedev/type-aliases-vs-interfaces-in-typescript-based-react-apps-e77c9a1d5fd0
 // use type instead of interface

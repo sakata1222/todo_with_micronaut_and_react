@@ -5,7 +5,7 @@ import Grid, { GridSize } from "@material-ui/core/Grid";
 import { useDrop } from "react-dnd";
 import "./TaskArea.css";
 import TaskCreationLauncherContainer from "./TaskCreationLauncherContainer";
-import TaskView, { DraggedTask } from "./TaskView";
+import DraggableTaskView, { DraggedTask } from "./DraggableTaskView";
 import Task, { TaskState } from "../model/Task";
 import { changeTaskState } from "../redux-module/ReduxTaskModule";
 import { taskSelector } from "../redux-module/Store";
@@ -115,7 +115,10 @@ function TaskAreaColumn(props: TaskAreaColumnProps) {
       {props.tasks.map((task, i) => {
         return (
           <Grid key={"task-area-column-" + props.state + i} item xs={6}>
-            <TaskView task={task} dndItemType={DnDItemType.TASK}></TaskView>
+            <DraggableTaskView
+              task={task}
+              dndItemType={DnDItemType.TASK}
+            ></DraggableTaskView>
           </Grid>
         );
       })}
