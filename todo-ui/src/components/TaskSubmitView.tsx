@@ -9,7 +9,7 @@ import {
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import Task, { TaskState } from "../model/Task";
+import Task from "../model/Task";
 import "./TaskSubmitView.css";
 
 type TaskSubmitView = {
@@ -59,10 +59,10 @@ function TaskSubmitView(props: TaskSubmitView) {
   };
   const onOk = (t: Task) => {
     props.onOkCallbak(t);
-    setName("");
-    setDescription("");
-    setDate(t.deadline);
-    setPriority(t.priority ? String(t.priority) : undefined);
+    setName(baseTask.name);
+    setDescription(baseTask.description);
+    setDate(baseTask.deadline);
+    setPriority(baseTask.priority ? String(baseTask.priority) : undefined);
   };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -88,7 +88,7 @@ function TaskSubmitView(props: TaskSubmitView) {
             size="small"
             fullWidth
             onChange={(e) => onDescriptionChange(e.target.value)}
-            value={description}
+            value={description ? description : ""}
             variant="outlined"
           ></TextField>
         </Grid>
