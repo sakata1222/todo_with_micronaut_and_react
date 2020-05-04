@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Popover from "@material-ui/core/Popover";
 import TaskSubmitView from "./TaskSubmitView";
 import Task from "../model/Task";

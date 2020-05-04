@@ -1,6 +1,7 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import Grid, { GridSize } from "@material-ui/core/Grid";
+import "./TaskHeader.css";
 
 // https://medium.com/@koss_lebedev/type-aliases-vs-interfaces-in-typescript-based-react-apps-e77c9a1d5fd0
 // use type instead of interface
@@ -17,11 +18,12 @@ function TaskHeader(props: TaskHeaderProps) {
     color: "primary.contrastText",
     fontSize: "h4.fontSize",
     fontWeight: "fontWeightBold",
-    textAlign: "center"
+    textAlign: "center",
+    mb: "8px",
   };
 
   return (
-    <Grid container className="taskHeader" spacing={1}>
+    <Grid container spacing={1}>
       <Grid item xs={props.todoAreaRatio}>
         <Box {...boxProps}>Todo</Box>
       </Grid>

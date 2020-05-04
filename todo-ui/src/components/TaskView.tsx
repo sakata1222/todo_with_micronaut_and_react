@@ -25,7 +25,7 @@ function TaskView(props: TaskViewProps) {
   ] = useState<HTMLButtonElement | null>(null);
   const [deleteDialogOepn, setDeleteDialogOpen] = useState(false);
   const [displayDescription, setDisplayDescription] = useState(false);
-  const descriptionLines: Array<string | JSX.Element> = new Array();
+  const descriptionLines: Array<string | JSX.Element> = [];
   (task.description ? task.description : "No description")
     .split("\n")
     .forEach((line, i) => {

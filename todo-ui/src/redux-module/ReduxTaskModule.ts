@@ -3,8 +3,6 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "./Store";
 import Task, { TaskList } from "../model/Task";
 import ITaskApi, { defaultTaskApi } from "../api/TaskApi";
-import { Stats } from "fs";
-import { id } from "date-fns/locale";
 
 // https://redux.js.org/recipes/usage-with-typescript/
 // https://github.com/erikras/ducks-modular-redux
