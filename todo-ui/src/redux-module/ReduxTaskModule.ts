@@ -16,6 +16,8 @@ const ACTION = {
   COMPLETE_ADD_TASK: "todo/task/COMPLETE_ADD_TASK",
   REQUEST_CHANGE_STATE: "todo/task/REQUEST_CHANGE_STATE",
   COMPLETE_CHANGE_STATE: "todo/task/COMPLETE_CHANGE_STATE",
+  REQUEST_EDIT_TASK: "todo/task/REQUEST_EDIT_TASK",
+  COMPLETE_EDIT_TASK: "todo/task/COMPLETE_EDIT_TASK",
   REQUEST_DELETE_TASK: "todo/task/REQUEST_DELETE_TASK",
   COMPLETE_DELETE_TASK: "todo/task/COMPLETE_DELETE_TASK",
 };
@@ -58,6 +60,17 @@ type CompletChangeTaskStateAction = {
   task: Task;
 };
 
+// edit
+type ReuqestEditTaskAction = {
+  type: typeof ACTION.REQUEST_EDIT_TASK;
+  task: Task;
+};
+
+type CompleteEditTaskAction = {
+  type: typeof ACTION.COMPLETE_EDIT_TASK;
+  task: Task;
+};
+
 // delete
 type RequestDeleteTaskAction = {
   type: typeof ACTION.REQUEST_DELETE_TASK;
@@ -68,14 +81,6 @@ type CompleteDeleteTaskAction = {
   type: typeof ACTION.REQUEST_DELETE_TASK;
   id: string;
 };
-
-type TaskActionTypes =
-  | RequestTasksAction
-  | ReceiveTasksAction
-  | RequestAddTaskAction
-  | CompleteAddTaskAction
-  | RequestChangeTaskStateAction
-  | CompletChangeTaskStateAction;
 
 // Action Creators
 // https://redux.js.org/advanced/async-actions
@@ -166,6 +171,31 @@ export function changeTaskState(
   };
 }
 
+function requestEditTask(task: Task): ReuqestEditTaskAction {
+  return {
+    type: ACTION.REQUEST_EDIT_TASK,
+    task: task,
+  };
+}
+
+function completeEditTask(task: Task): CompleteEditTaskAction {
+  return {
+    type: ACTION.COMPLETE_EDIT_TASK,
+    task: task,
+  };
+}
+
+export function editTask(
+  task: Task
+): ThunkAction<void, RootState, unknown, Action<String>> {
+  return function (dispatch) {
+    dispatch(requestEditTask(task));
+    return taskApi
+      .putTask(task)
+      .then((task) => dispatch(completeEditTask(task)));
+  };
+}
+
 function requestDeleteTask(id: string): RequestDeleteTaskAction {
   return {
     type: ACTION.REQUEST_DELETE_TASK,
@@ -199,6 +229,14 @@ const initialState: TodoTaskState = {
   tasks: new TaskList([]),
 };
 
+type TaskActionTypes =
+  | ReceiveTasksAction
+  | CompleteAddTaskAction
+  | RequestChangeTaskStateAction
+  | CompletChangeTaskStateAction
+  | CompleteEditTaskAction
+  | CompleteDeleteTaskAction;
+
 function taskReducer(
   state = initialState,
   action: TaskActionTypes
@@ -227,6 +265,11 @@ function taskReducer(
       const changeStateAction = action as CompletChangeTaskStateAction;
       return {
         tasks: state.tasks.updateTask(changeStateAction.task),
+      };
+    case ACTION.COMPLETE_EDIT_TASK:
+      const editTask = action as CompleteEditTaskAction;
+      return {
+        tasks: state.tasks.updateTask(editTask.task),
       };
     case ACTION.COMPLETE_DELETE_TASK:
       const deleteAction = action as CompleteDeleteTaskAction;

@@ -1,0 +1,9 @@
+.Task-creation-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.Task-creation-button {
+  margin-right: 4px;
+  margin-left: 4px;
+}

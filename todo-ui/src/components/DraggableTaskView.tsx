@@ -17,16 +17,16 @@ export interface DraggedTask {
 function DraggableTaskView(props: DraggableTaskViewProps) {
   const [{ isDragging }, drag] = useDrag({
     item: { type: props.dndItemType, taskId: props.task.id },
-    collect: monitor => ({
-      isDragging: monitor.isDragging()
-    })
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
   return (
     <div
       ref={drag}
       style={{
         opacity: isDragging ? 0 : 1,
-        cursor: "move"
+        cursor: "move",
       }}
     >
       <TaskView task={props.task}></TaskView>

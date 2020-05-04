@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@material-ui/core/Box";
 import Grid, { GridSize } from "@material-ui/core/Grid";
@@ -17,7 +17,7 @@ type TaskAreaProps = {
 };
 
 const DnDItemType = {
-  TASK: "task"
+  TASK: "task",
 };
 
 function TaskArea(props: TaskAreaProps) {
@@ -42,20 +42,20 @@ function TaskColumns(props: TaskColumnsProps) {
   const [, todoDrop] = useDrop({
     accept: DnDItemType.TASK,
     drop: (item: DraggedTask) =>
-      dispatch(changeTaskState(item.taskId, TaskState.TODO))
+      dispatch(changeTaskState(item.taskId, TaskState.TODO)),
   });
   const [, doingDrop] = useDrop({
     accept: DnDItemType.TASK,
     drop: (item: DraggedTask) =>
-      dispatch(changeTaskState(item.taskId, TaskState.DOING))
+      dispatch(changeTaskState(item.taskId, TaskState.DOING)),
   });
   const [, doneDrop] = useDrop({
     accept: DnDItemType.TASK,
     drop: (item: DraggedTask) =>
-      dispatch(changeTaskState(item.taskId, TaskState.DONE))
+      dispatch(changeTaskState(item.taskId, TaskState.DONE)),
   });
   const boxProps = {
-    className: "Task-column-box"
+    className: "Task-column-box",
   };
   return (
     <Grid container className="Task-area" spacing={1}>

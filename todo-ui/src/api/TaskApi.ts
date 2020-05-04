@@ -6,6 +6,7 @@ export default interface ITaskApi {
   fetchTasks(): Promise<TaskList>;
   postTask(task: Task): Promise<Task>;
   updateTaskState(id: string, state: string): Promise<Task>;
+  putTask(task: Task): Promise<Task>;
   deleteTask(id: string): Promise<null>;
 }
 const dateFnsUtils = new DateFnsUtils();
@@ -54,6 +55,19 @@ export class TaskApi implements ITaskApi {
         "Content-Type": ContentTypeJson,
       },
       body: JSON.stringify(request),
+    })
+      .then((response) => response.json())
+      .then((json) => json as TaskDto)
+      .then((dto) => this.toTask(dto));
+  }
+
+  putTask(task: Task): Promise<Task> {
+    return fetch("task/" + task.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": ContentTypeJson,
+      },
+      body: JSON.stringify(this.toTaskDto(task)),
     })
       .then((response) => response.json())
       .then((json) => json as TaskDto)
