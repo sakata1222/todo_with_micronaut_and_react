@@ -51,7 +51,7 @@ function TaskSubmitView(props: TaskSubmitView) {
       id: baseTask.id,
       description: description ? description.trim() : undefined,
       name: name,
-      state: TaskState.TODO,
+      state: baseTask.state,
       deadline: date != null ? date : undefined,
       priority: Number(priority),
     };
