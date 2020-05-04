@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  /* to avoid scrolbar... some components stci out area..*/
+  margin-right: 8px;
+  margin-left: 8px;
+  height: 100%;
 }
 
 .App-logo {

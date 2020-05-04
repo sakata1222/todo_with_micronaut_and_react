@@ -1,0 +1,22 @@
+.Task-card-content {
+  margin-left: 4px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+}
+
+.Task-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Task-typography {
+  word-wrap: break-word;
+}
+
+.Task-title {
+  width: calc(100% - 80px);
+}
+
+.Task-buttons {
+  width: 80px;
+}
