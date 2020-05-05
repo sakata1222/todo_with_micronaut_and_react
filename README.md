@@ -18,14 +18,15 @@
 
 ### Description
 
-TODO management application created by the following 
+TODO management application that uses the following 
 technologies :
 
 - Server
     - [Micronaut](https://micronaut.io/)
     - [H2 Database](https://www.h2database.com/html/main.html)
+    - [Flyway](https://flywaydb.org/)
     - [jOOQ](https://www.jooq.org/)
 
 - UI
+    - [React](https://reactjs.org/)
     - [MATERIAL-UI](https://material-ui.com/)
-
