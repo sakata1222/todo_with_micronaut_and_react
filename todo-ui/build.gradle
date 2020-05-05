@@ -1,0 +1,17 @@
+plugins {
+  id "org.siouan.frontend" version "2.0.0"
+}
+
+frontend {
+  nodeVersion = '12.16.3'
+  assembleScript = 'run build'
+  cleanScript = 'run clean'
+}
+
+task npmAuditFix(type: org.siouan.frontendgradleplugin.infrastructure.gradle.RunNpmYarn) {
+ script = 'audit fix'
+}
+
+task ncuUpdate(type: org.siouan.frontendgradleplugin.infrastructure.gradle.RunNpx) {
+  script = 'ncu -u'
+}

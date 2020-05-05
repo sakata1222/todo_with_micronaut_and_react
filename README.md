@@ -4,17 +4,26 @@
 
 ## How to start
 
+### Run application on your host
+
+```shell
+./gradlew start
+```
+
 ### For developer
 
 - server
-    ```shell
-    ./gradlew startTodoServer
-    ```
+
+  ```shell
+  ./gradlew startTodoServer
+  ```
+
 - ui
-    ```shell
-    cd todo-ui
-    npm start
-    ```
+
+  ```shell
+  cd todo-ui
+  npm start
+  ```
 
 ### Description
 
@@ -22,11 +31,12 @@ TODO management application that uses the following
 technologies :
 
 - Server
-    - [Micronaut](https://micronaut.io/)
-    - [H2 Database](https://www.h2database.com/html/main.html)
-    - [Flyway](https://flywaydb.org/)
-    - [jOOQ](https://www.jooq.org/)
+
+  - [Micronaut](https://micronaut.io/)
+  - [H2 Database](https://www.h2database.com/html/main.html)
+  - [Flyway](https://flywaydb.org/)
+  - [jOOQ](https://www.jooq.org/)
 
 - UI
-    - [React](https://reactjs.org/)
-    - [MATERIAL-UI](https://material-ui.com/)
+  - [React](https://reactjs.org/)
+  - [MATERIAL-UI](https://material-ui.com/)

@@ -4,3 +4,17 @@
  * This is a general purpose Gradle build.
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds
  */
+
+task start doLast {
+  println project(':todo-server:application:').tasks.getByName('runShadow').getGroup()
+}
+
+task processFrontendResources(type: Copy) {
+  from "${project(':todo-ui').buildDir.absolutePath}"
+  into "${project(':todo-server:application').buildDir.absolutePath}/resources/main/public"
+}
+
+start.dependsOn ':todo-ui:assembleFrontend', processFrontendResources
+processFrontendResources.mustRunAfter ':todo-ui:assembleFrontend'
+start.finalizedBy ':todo-server:application:runShadow'
+
