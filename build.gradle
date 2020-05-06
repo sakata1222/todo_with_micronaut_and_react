@@ -6,8 +6,10 @@
  */
 
 task start doLast {
-  println project(':todo-server:application:').tasks.getByName('runShadow').getGroup()
+  println "start TODO application"
 }
+
+task assemble
 
 task processFrontendResources(type: Copy) {
   from "${project(':todo-ui').buildDir.absolutePath}"
@@ -15,6 +17,6 @@ task processFrontendResources(type: Copy) {
 }
 
 start.dependsOn ':todo-ui:assembleFrontend', processFrontendResources
+assemble.dependsOn processFrontendResources
 processFrontendResources.mustRunAfter ':todo-ui:assembleFrontend'
 start.finalizedBy ':todo-server:application:runShadow'
-

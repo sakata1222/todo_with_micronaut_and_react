@@ -4,6 +4,20 @@
 
 ## How to start
 
+### Run as a docker container
+
+1. Build a image
+
+   ```shell
+   make
+   ```
+
+1. Run as a container
+
+  ```shell
+  ./docker-run.sh -p <your-port>
+  ```
+
 ### Run application on your host
 
 ```shell
@@ -14,16 +28,16 @@
 
 - server
 
-  ```shell
-  ./gradlew startTodoServer
-  ```
+    ```shell
+    ./gradlew startTodoServer
+    ```
 
 - ui
 
-  ```shell
-  cd todo-ui
-  npm start
-  ```
+    ```shell
+    cd todo-ui
+    npm start
+    ```
 
 ### Description
 
