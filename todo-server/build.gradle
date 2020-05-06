@@ -3,6 +3,6 @@ plugins {
   id "org.flywaydb.flyway" version "6.1.1"
 }
 
-task('startTodoServer') {
+task startTodoServer {
 }
 startTodoServer.finalizedBy(':todo-server:application:run')

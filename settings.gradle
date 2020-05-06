@@ -12,3 +12,4 @@ include 'todo-server'
 include 'todo-server:application'
 include 'todo-server:h2db-dao'
 include 'todo-server:jooq-custom'
+include "todo-ui"
