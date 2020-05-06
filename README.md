@@ -14,9 +14,9 @@
 
 1. Run as a container
 
-  ```shell
-  ./docker-run.sh -p <your-port>
-  ```
+    ```shell
+    ./docker-run.sh -p <your-port>
+     ```
 
 ### Run application on your host
 
